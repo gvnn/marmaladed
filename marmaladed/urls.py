@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -6,7 +7,8 @@ from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'marmaladed.views.home', name='home'),
+	url(r'^$', 'marmaladed.views.home', name='home'),
+	url(r'^gui/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT})
     # url(r'^marmaladed/', include('marmaladed.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -8,6 +8,7 @@ from django.conf import settings
 urlpatterns = patterns('',
     # Examples:
 	url(r'^$', 'marmaladed.views.home', name='home'),
+	url(r'^about$', 'marmaladed.views.about', name='about'),
 	url(r'^gui/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_DOC_ROOT})
     # url(r'^marmaladed/', include('marmaladed.foo.urls')),
 

@@ -2,6 +2,8 @@ import os
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
+PROJECT_NAME = 'Marmeladed'
+
 DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG

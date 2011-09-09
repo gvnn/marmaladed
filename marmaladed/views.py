@@ -7,3 +7,6 @@ def home(request):
 	
 def about(request):
 	return render_to_response('bootstrap/about.html', {'settings': settings, 'module_about' : True})
+	
+def console(request):
+	return render_to_response('bootstrap/console.html', {'settings': settings, 'module_console' : True})

@@ -1,19 +1,23 @@
 import os
 
+#custom variables
+
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 PROJECT_NAME = 'Marmeladed'
 
+MD_SERVERS = {
+    'default': {
+        'LOCATION': '127.0.0.1',
+		'PORT' : '11211'
+    }
+}
+
+#django variables
+
 DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
 
 TEMPLATE_DIRS = (
     PROJECT_PATH + '/templates/'

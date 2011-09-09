@@ -1,0 +1,46 @@
+{% extends "bootstrap/base.html" %}
+{% block module_title %}Console{% endblock %}
+{% block custom_scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+<script>
+	var enter_key = 13;
+	$(document).ready(function() {
+		activeLine = $('.readLine.active');
+		activeLine.bind("keydown", function(ev) {
+			switch (ev.keyCode) {
+				case enter_key:
+					processInput(this.value);
+				break;
+			}
+		});
+	});
+		
+	function processInput(value){
+			
+	}
+</script>
+{% endblock %}
+{% block content %}
+<div id="masthead"></div>
+<section id="about">
+	<div class="page-header">
+		<h1>Console</h1>
+	</div>
+	<div class="row">
+		<div class="span16">
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+				Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+				Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum				
+			</p>
+			<div id="terminal">
+				<div class="line">
+					<span class="prompt"> &gt;</span>
+					<input type="text" class="readLine active">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}

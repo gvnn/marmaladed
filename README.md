@@ -4,15 +4,6 @@ a simple django memcached console
 
 **Getting Started**
 
-* install python-memcached
-
-	http://www.tummy.com/Community/software/python-memcached/
-	
-	or
-	
-	http://sendapatch.se/projects/pylibmc/
-	
-
 * Add marmaladed to your INSTALLED_APPS setting:
 
 	INSTALLED_APPS = (

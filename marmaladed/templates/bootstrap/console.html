@@ -6,6 +6,9 @@
 	var enter_key = 13;
 	$(document).ready(function() {
 		newInputLine();
+		$("#terminal").bind("click", function(){
+			$(".readLine.active").focus();
+		});
 	});
 	
 	function sendCommand(args) {
@@ -71,7 +74,11 @@
 		$("div#terminal").append($('<p>').html('HELP'));
 		$("div#terminal").append($('<p>').html('memcached commands'));
 		$("div#terminal").append($('<pre>').html('	stats			General statistics'));
+		$("div#terminal").append($('<pre>').html('	stats items		Returns information about item storage per slab'));
 		$("div#terminal").append($('<pre>').html('	stats settings		Returns details of the settings of the running memcached'));
+		$("div#terminal").append($('<pre>').html('	stats sizes		Returns information about the general size and count of all items stored in the cache'));
+		$("div#terminal").append($('<pre>').html('	stats slabs		Returns information about each of the slabs'));
+		
 		$("div#terminal").append($('<p>').html('marmaladed commands'));
 		$("div#terminal").append($('<pre>').html('	clear	Clear the console screen'));
 		$("div#terminal").append($('<pre>').html('	help	Print the help'));
@@ -92,7 +99,7 @@
 <div id="masthead"></div>
 <section id="about">
 	<div class="page-header">
-		<h1>Console <small>marmaladed browser shell</small></h1>
+		<h1><small>Memcached browser </small>console</h1>
 	</div>
 	<div class="row">
 		<div class="span16">

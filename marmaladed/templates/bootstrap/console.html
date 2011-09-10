@@ -21,21 +21,19 @@
 			if(args.length > 0) {
 				switch(args[0]) {
 					case "stats":
-						sendCommand({'command' : 'stats'});
+						args.length > 0 ? sendCommand({'command' : 'stats', 'args' : args[1]}) : sendCommand({'command' : 'stats'});
 						break;
 					case "clear":
 						clearConsole();
-						break
+						break;
+					case "help":
+						printHelp();
+						break;
 				}
 			}
 		} else {
 			newInputLine();
 		}
-	}
-	
-	function clearConsole() {
-		$("div#terminal").html("");
-		newInputLine();
 	}
 	
 	function newInputLine() {
@@ -62,23 +60,45 @@
 			}
 		});
 	}
+	
+	function clearConsole() {
+		$("div#terminal").html("");
+		newInputLine();
+	}
+	
+	
+	function printHelp() {
+		$("div#terminal").append($('<p>').html('HELP'));
+		$("div#terminal").append($('<p>').html('memcached commands'));
+		$("div#terminal").append($('<pre>').html('	stats			General statistics'));
+		$("div#terminal").append($('<pre>').html('	stats settings		Returns details of the settings of the running memcached'));
+		$("div#terminal").append($('<p>').html('marmaladed commands'));
+		$("div#terminal").append($('<pre>').html('	clear	Clear the console screen'));
+		$("div#terminal").append($('<pre>').html('	help	Print the help'));
+		/*
+		PTAG('Note: Only a subset of MongoDB\'s features are provided here.') +
+		PTAG('For everything else, download and install at mongodb.org.') +
+		PTAG('db.foo.help() help on collection methods') +
+		PTAG('db.foo.find() list objects in collection foo') +
+		PTAG('db.foo.save({a: 1}) save a document to collection foo') +
+		PTAG('db.foo.update({a: 1}, {a: 2}) update document where a == 1') +
+		PTAG('db.foo.find({a: 1}) list objects in foo where a == 1') +
+		PTAG('it use to further iterate over a cursor');*/
+		newInputLine();
+	}
 </script>
 {% endblock %}
 {% block content %}
 <div id="masthead"></div>
 <section id="about">
 	<div class="page-header">
-		<h1>Console</h1>
+		<h1>Console <small>marmaladed browser shell</small></h1>
 	</div>
 	<div class="row">
 		<div class="span16">
-			<p>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-				Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-				Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum				
-			</p>
-			<div id="terminal"></div>
+			<div id="terminal">
+				<p>type "help" for help</p>
+			</div>
 		</div>
 	</div>
 </section>

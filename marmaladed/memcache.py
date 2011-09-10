@@ -14,9 +14,12 @@ class Memcache:
 			self._client = telnetlib.Telnet(self._host, self._port)
 		return self._client
 
-	def stats(self):
-		self.client.write("stats\n")
-		return self.client.read_until("END")
+	def stats(self, stat_args = None):
+		if not stat_args:
+			self.client.write("stats\n")
+		else:
+			self.client.write('stats %s\n' % stat_args)
+		return self.client.expect(["ERROR","END"])[2]
 
 	def close(self):
 		self.client.close()

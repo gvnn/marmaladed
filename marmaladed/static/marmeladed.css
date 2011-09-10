@@ -3,23 +3,33 @@
 }
 
 div#terminal {
-  background: #fefbf3;
-  padding: 9px;
-  border: 1px solid rgba(0,0,0,.2);
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.1);
-  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.1);
-  box-shadow: 0 1px 2px rgba(0,0,0,.1);
-  font-family: Monaco, monospace;
+	background: #fefbf3;
+	padding: 9px;
+	border: 1px solid rgba(0,0,0,.2);
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.1);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.1);
+	box-shadow: 0 1px 2px rgba(0,0,0,.1);
+	font-family: Monaco,Andale Mono,Courier New,monospace;
+	height: 300px;
+	overflow: auto;
 }
 
 #terminal input {
-    font-family: Monaco,monospace;
+    font-family: Monaco,Andale Mono,Courier New,monospace;
     background: none repeat scroll 0 0 #fefbf3;
     border: medium none;
     display: inline;
     font-size: 100%;
-    margin: 1px 0 1px 10px;
     padding: 2px;
-    width: 880px;
+    width: 870px;
     box-shadow: none;
+}
+
+#terminal pre {
+	background-color: transparent;
+    font-family: Monaco,Andale Mono,Courier New,monospace;
+    border: none;
+    border-radius: none;
+	margin: 0;
+	padding: 0;
 }

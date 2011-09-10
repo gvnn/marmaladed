@@ -5,18 +5,62 @@
 <script>
 	var enter_key = 13;
 	$(document).ready(function() {
-		activeLine = $('.readLine.active');
-		activeLine.bind("keydown", function(ev) {
+		newInputLine();
+	});
+	
+	function sendCommand(args) {
+		$.post("/console/command", args, function(data) {
+			$(".line.active").append($("<pre>").text(data));
+			newInputLine();
+		});
+	}
+	
+	function processInput(value){
+		if(value.length > 0) {
+			args = value.split(" ");
+			if(args.length > 0) {
+				switch(args[0]) {
+					case "stats":
+						sendCommand({'command' : 'stats'});
+						break;
+					case "clear":
+						clearConsole();
+						break
+				}
+			}
+		} else {
+			newInputLine();
+		}
+	}
+	
+	function clearConsole() {
+		$("div#terminal").html("");
+		newInputLine();
+	}
+	
+	function newInputLine() {
+		activeInput = $(".readLine.active");
+		if(activeInput.length > 0) {
+			activeInput.unbind("keydown");
+			activeInput.removeClass("active");
+			activeInput.attr("disabled", "disabled");
+			activeDiv = $(".line.active");
+			activeDiv.removeClass("active");
+		}
+		$("div#terminal").append($('<div>').attr("class", "line active").html('<span class="prompt"> &gt;</span><input type="text" class="readLine active">'));
+		activeInput = $(".readLine.active");
+		bindInput(activeInput);
+		activeInput.focus();
+	}
+	
+	function bindInput(obj) {
+		obj.bind("keydown", function(ev) {
 			switch (ev.keyCode) {
 				case enter_key:
 					processInput(this.value);
 				break;
 			}
 		});
-	});
-		
-	function processInput(value){
-			
 	}
 </script>
 {% endblock %}
@@ -34,12 +78,7 @@
 				Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 				Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum				
 			</p>
-			<div id="terminal">
-				<div class="line">
-					<span class="prompt"> &gt;</span>
-					<input type="text" class="readLine active">
-				</div>
-			</div>
+			<div id="terminal"></div>
 		</div>
 	</div>
 </section>

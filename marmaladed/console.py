@@ -14,7 +14,8 @@ def command(request):
 			args = unicodedata.normalize('NFKD', request.POST["args"]).encode('ascii','ignore')
 			
 		switch = {
-			'stats': lambda m: m.stats(args)
+			'stats': lambda m: m.stats(args),
+			'delete': lambda m: m.delete(args)
 		}
 		if command in switch:
 			m = memcache.Memcache()

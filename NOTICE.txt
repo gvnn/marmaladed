@@ -1,0 +1,7 @@
+Marmaladed
+Copyright 2011 Giovanni Ferron
+
+This software contains code derived from:
+
+- Bootstrap (v 1.2), toolkit from twitter (http://twitter.github.com/bootstrap)
+- Flot (v 0.7), javascript plotting library for jQuery (http://code.google.com/p/flot/)

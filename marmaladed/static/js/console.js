@@ -23,24 +23,51 @@ function sendCommand(args) {
 	});
 }
 
+var storeCommand = [];
+
 function processInput(value){
 	if(value.length > 0) {
 		args = value.split(" ");
 		if(args.length > 0) {
 			switch(args[0]) {
 				case "stats":
+					storeCommand.length = 0;
 					args.length > 0 ? sendCommand({'command' : 'stats', 'args' : joinArgs(args, 1, " ")}) : sendCommand({'command' : 'stats'});
 					break;
-				case "delete":
+				case "delete":	
+				case "get":
+					storeCommand.length = 0;
 					if(args.length > 0) {
-						sendCommand({'command' : 'delete', 'args' : joinArgs(args, 1, " ")});
+						sendCommand({'command' : args[0].toLowerCase(), 'args' : joinArgs(args, 1, " ")});
+					}
+					break;
+				case "set":	
+				case "add":
+				case "replace":
+				case "append":
+				case "prepend":
+				case "cas":
+					storeCommand.length = 0;
+					if(args.length > 0) {
+						if(storeCommand.length == 0) {
+							storeCommand.push(args[0]);
+							storeCommand.push(joinArgs(args, 1, " "));
+							newInputLine();
+						}
 					}
 					break;
 				case "clear":
+					storeCommand.length = 0;
 					clearConsole();
 					break;
 				case "help":
+					storeCommand.length = 0;
 					printHelp();
+					break;
+				default:
+					if(storeCommand.length > 0) {
+						sendCommand({'command' : storeCommand[0].toLowerCase(), 'args' : storeCommand[1].toLowerCase(), 'value' : args.join(" ")});
+					}
 					break;
 			}
 		}
@@ -80,14 +107,23 @@ function clearConsole() {
 }
 
 function printHelp() {
-	$("div#terminal").append($('<p>').html('memcached commands'));
-	$("div#terminal").append($('<pre>').html('delete &lt;key&gt; [noreply]	Explicit deletion of items.'));
+	$("div#terminal").append($('<pre>').html('[set|add|replace|append|prepend] &lt;key&gt; &lt;flags&gt; &lt;exp_time&gt; &lt;bytes&gt; [no_reply]\\r\\n&lt;data block&gt;\\r\\n'));
+	$("div#terminal").append($('<pre>').html('	- \"set\" means \"store this data\".'));
+	$("div#terminal").append($('<pre>').html('	- \"add\" means \"store this data, but only if the server *doesn\'t* already hold data for this key\".'));
+	$("div#terminal").append($('<pre>').html('	- \"replace\" means \"store this data, but only if the server *does* already hold data for this key\".'));
+	$("div#terminal").append($('<pre>').html('	- \"append\" means \"add this data to an existing key after existing data\".'));
+	$("div#terminal").append($('<pre>').html('	- \"prepend\" means \"add this data to an existing key before existing data\".'));
+	$("div#terminal").append($('<br>'));
+	$("div#terminal").append($('<pre>').html('cas &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; &lt;cas unique&gt; [no_reply]\\r\\n&lt;data block&gt;\\r\\n'));
+	$("div#terminal").append($('<pre>').html(' 	- means "store this data but only if no one else has updated since I last fetched it.".'));
+	$("div#terminal").append($('<br>'));
+	$("div#terminal").append($('<pre>').html('get &lt;key&gt;*		Retrieves values in cache. * means one or more key strings separated by whitespace'));
+	$("div#terminal").append($('<pre>').html('delete &lt;key&gt; [noreply]	Explicit deletion of items'));
 	$("div#terminal").append($('<pre>').html('stats			General statistics'));
 	$("div#terminal").append($('<pre>').html('stats items		Returns information about item storage per slab'));
 	$("div#terminal").append($('<pre>').html('stats settings		Returns details of the settings of the running memcached'));
 	$("div#terminal").append($('<pre>').html('stats sizes		Returns information about the general size and count of all items stored in the cache'));
 	$("div#terminal").append($('<pre>').html('stats slabs		Returns information about each of the slabs'));
-	$("div#terminal").append($('<p>').html('marmaladed commands'));
-	$("div#terminal").append($('<pre>').html('clear	Clear the console screen'));
+	$("div#terminal").append($('<pre>').html('clear			Clear the console screen'));
 	newInputLine();
 }

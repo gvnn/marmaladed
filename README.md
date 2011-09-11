@@ -1,4 +1,5 @@
-![marmaladed](https://github.com/gvnn/marmaladed/raw/master/resources/logo.md.png)
+Marmaladed
+==========
 
 a simple django memcached console
 

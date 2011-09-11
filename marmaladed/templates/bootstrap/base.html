@@ -10,19 +10,19 @@
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<!-- Le styles -->
-		<link href="/gui/bs/bootstrap-1.2.0.min.css" rel="stylesheet" />
-		<link href="/gui/marmaladed.css" rel="stylesheet" />
+		<link href="{% url marmaladed.views.home %}gui/bs/bootstrap-1.2.0.min.css" rel="stylesheet" />
+		<link href="{% url marmaladed.views.home %}gui/marmaladed.css" rel="stylesheet" />
 		{% block custom_scripts %}{% endblock %}
 	</head>
 	<body>
 		<div class="topbar">
 			<div class="fill">
 				<div class="container">
-					<h3><a href="#">{{ settings.PROJECT_NAME }}</a></h3>
+					<h3><a href="{% url marmaladed.views.home %}">{{ settings.PROJECT_NAME }}</a></h3>
 					<ul class="nav">
-						<li{% if module_home %} class="active"{% endif %}><a href="/">Home</a></li>
-						<li{% if module_console %} class="active"{% endif %}><a href="/console">Console</a></li>
-						<li{% if module_about %} class="active"{% endif %}><a href="/about">About</a></li>
+						<li{% if module_home %} class="active"{% endif %}><a href="{% url marmaladed.views.home %}">Home</a></li>
+						<li{% if module_console %} class="active"{% endif %}><a href="{% url marmaladed.views.console %}">Console</a></li>
+						<li{% if module_about %} class="active"{% endif %}><a href="{% url marmaladed.views.about %}">About</a></li>
 					</ul>
 				</div>
 			</div>

@@ -6,16 +6,43 @@
 {% endblock %}
 {% block content %}
 <div id="masthead"></div>
+{% if settings.MD_SERVERS %}
 <section id="about">
 	<div class="page-header">
 		<h1><small>Memcached browser </small>console</h1>
 	</div>
 	<div class="row">
 		<div class="span16">
+			<div class="clearfix">
+				<label for="host">Select server: </label>
+				<div class="input">
+					<select name="host" id="host">
+						{% for key, value in settings.MD_SERVERS.items %}
+						<option value="{{ value.LOCATION }}:{{ value.PORT }}">{{key}} - {{ value.LOCATION }}:{{ value.PORT }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
 			<div id="terminal">
 				<p>type "help" for help</p>
 			</div>
 		</div>
 	</div>
 </section>
+{% else %}
+	<section id="servers">
+		<h1>Hi there!</h1>
+		<p>Marmaladed requires some settings... nothing too complicated though.</p>
+		<p>Add the following lines to settings.py</p>
+			<pre>
+MD_SERVERS = {
+	'server label': {
+		'LOCATION' : '127.0.0.1',
+		'PORT' : '11211'
+	},
+	...
+}</pre>
+		</p>
+	</section>
+{% endif %}
 {% endblock %}

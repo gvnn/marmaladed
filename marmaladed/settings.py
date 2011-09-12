@@ -7,8 +7,12 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 PROJECT_NAME = 'Marmaladed'
 
 MD_SERVERS = {
-    'default': {
-        'LOCATION': '127.0.0.1',
+    'Virtual': {
+        'LOCATION' : '127.0.0.1',
+		'PORT' : '11211'
+    },
+    'Gvnn': {
+        'LOCATION' : '10.3.55.141',
 		'PORT' : '11211'
     }
 }

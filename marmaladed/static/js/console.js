@@ -1,10 +1,19 @@
 var enter_key = 13;
 
+var HOST = "";
+
 $(document).ready(function() {
-	newInputLine();
-	$("#terminal").bind("click", function(){
-		$(".readLine.active").focus();
-	});
+	if($("#host").val() != "") {
+		HOST = $("#host").val();
+		newInputLine();
+		$("#terminal").bind("click", function(){
+			$(".readLine.active").focus();
+		});
+		$("#host").bind("change", function(){
+			HOST = $("#host").val();
+			clearConsole();
+		});
+	}
 });
 
 function joinArgs(array, start, sep) {
@@ -32,13 +41,13 @@ function processInput(value){
 			switch(args[0]) {
 				case "stats":
 					storeCommand.length = 0;
-					args.length > 0 ? sendCommand({'command' : 'stats', 'args' : joinArgs(args, 1, " ")}) : sendCommand({'command' : 'stats'});
+					args.length > 0 ? sendCommand({'host' : HOST, 'command' : 'stats', 'args' : joinArgs(args, 1, " ")}) : sendCommand({'host' : HOST, 'command' : 'stats'});
 					break;
 				case "delete":	
 				case "get":
 					storeCommand.length = 0;
 					if(args.length > 0) {
-						sendCommand({'command' : args[0].toLowerCase(), 'args' : joinArgs(args, 1, " ")});
+						sendCommand({'host' : HOST, 'command' : args[0].toLowerCase(), 'args' : joinArgs(args, 1, " ")});
 					}
 					break;
 				case "set":	
@@ -66,7 +75,7 @@ function processInput(value){
 					break;
 				default:
 					if(storeCommand.length > 0) {
-						sendCommand({'command' : storeCommand[0].toLowerCase(), 'args' : storeCommand[1].toLowerCase(), 'value' : args.join(" ")});
+						sendCommand({'host' : HOST, 'command' : storeCommand[0].toLowerCase(), 'args' : storeCommand[1].toLowerCase(), 'value' : args.join(" ")});
 					}
 					break;
 			}

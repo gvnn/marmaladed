@@ -30,7 +30,8 @@ def command(request):
 			'cas': lambda m: m.storage("cas", args, value)
 		}
 		if command in switch:
-			m = memcache.Memcache()
+			host = unicodedata.normalize('NFKD', request.POST["host"]).encode('ascii','ignore').split(":")
+			m = memcache.Memcache(host[0], host[1])
 			m.outputmode = memcache.MemcacheOutput.CONSOLE
 			r = switch[command](m)
 			return HttpResponse(r)

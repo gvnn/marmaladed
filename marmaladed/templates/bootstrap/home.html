@@ -1,10 +1,27 @@
 {% extends "bootstrap/base.html" %}
 {% block module_title %}Home{% endblock %}
 {% block content %}
-<!-- Main hero unit for a primary marketing message or call to action -->
-<div class="hero-unit">
-	<h1>Welcome!</h1>
-	<p>Marmaladed is a simple web tool to manage <a href="http://memcached.org/" target="_blank">memcached</a>. </p>
-	<p><a class="btn primary large" hreF="{% url marmaladed.views.console %}">Try the console &raquo;</a></p>
-</div>
+<div id="masthead"></div>
+{% for key, value in settings.MD_SERVERS.items %}
+	<section id="server{{ forloop.counter }}">
+		<div class="page-header">
+			<h2>{{ key }} <small>({{ value.LOCATION }}:{{ value.PORT }})</small></h2>
+		</div>
+	</section>
+{% empty %}
+	<section id="servers">
+		<h1>Hi there!</h1>
+		<p>Marmaladed requires some settings... nothing too complicated though.</p>
+		<p>Add the following lines to settings.py</p>
+			<pre>
+MD_SERVERS = {
+	'server label': {
+		'LOCATION' : '127.0.0.1',
+		'PORT' : '11211'
+	},
+	...
+}</pre>
+		</p>
+	</section>
+{% endfor %}
 {% endblock %}

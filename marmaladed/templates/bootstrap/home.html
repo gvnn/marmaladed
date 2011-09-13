@@ -53,7 +53,7 @@
 				</script>
 			</div>
 			<div class="span10 columns">
-				<h4>Some data <small>(<a href="{% url marmaladed.views.stats key %}">complete stats</a>)</small></h4>
+				<h4>Stats <small>(<a href="{% url marmaladed.views.stats key %}">complete stats</a>)</small></h4>
 				<div class="twipsies well">
 					<p>Memcached Server Version: <code>{{ stats|getkey:key|getkey:'version' }}</code></p>
 					<p>Process id: <code>{{ stats|getkey:key|getkey:'pid' }}</code></p>
@@ -66,6 +66,14 @@
 					<p>Hits: <code>{{ stats|getkey:key|getkey:'get_hits' }}</code></p>
 					<p>Misses: <code>{{ stats|getkey:key|getkey:'get_misses' }}</code></p>
 				</div>
+				<form action="{% url marmaladed.views.keys key %}" method="post">{% csrf_token %}
+					<div class="clearfix">
+						<label for="xlInput">Search for a key:</label>
+						<div class="input">
+							<input type="text" size="30" name="xlInput" id="xlInput" class="xlarge">&nbsp;<input type="submit" value="Search" class="btn primary">
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</section>

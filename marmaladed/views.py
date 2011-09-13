@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from django.core.context_processors import csrf
 from django.conf import settings
 from django.shortcuts import render_to_response
 import memcache
@@ -25,3 +26,8 @@ def stats(request, server):
 
 def console(request):
 	return render_to_response('bootstrap/console.html', {'settings': settings, 'module_console' : True})
+	
+def keys(request, server):
+	c = {}
+	c.update(csrf(request))
+	return render_to_response('bootstrap/about.html', c)

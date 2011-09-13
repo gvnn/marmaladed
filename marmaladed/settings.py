@@ -29,6 +29,13 @@ TEMPLATE_DIRS = (
     PROJECT_PATH + '/templates/'
 )
 
+MIDDLEWARE_CLASSES = ('django.middleware.common.CommonMiddleware',
+ 'django.contrib.sessions.middleware.SessionMiddleware',
+ 'django.middleware.csrf.CsrfViewMiddleware',
+ 'django.middleware.csrf.CsrfResponseMiddleware',
+ 'django.contrib.auth.middleware.AuthenticationMiddleware',
+ 'django.contrib.messages.middleware.MessageMiddleware',)
+
 STATIC_DOC_ROOT = PROJECT_PATH + '/static/'
 
 ROOT_URLCONF = 'marmaladed.urls'

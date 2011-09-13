@@ -18,7 +18,7 @@
 				<div class="input">
 					<select name="host" id="host">
 						{% for key, value in settings.MD_SERVERS.items %}
-						<option value="{{ value.LOCATION }}:{{ value.PORT }}">{{key}} - {{ value.LOCATION }}:{{ value.PORT }}</option>
+						<option value="{{ value.LOCATION }}:{{ value.PORT }}">{{value.DESCRIPTION}}</option>
 						{% endfor %}
 					</select>
 				</div>

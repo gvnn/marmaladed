@@ -16,8 +16,12 @@ def home(request):
 def about(request):
 	return render_to_response('bootstrap/about.html', {'settings': settings, 'module_about' : True})
 
-def stats(request):
-	return render_to_response('bootstrap/about.html', {'settings': settings, 'module_about' : True})
+def stats(request, server):
+	server_settings = settings.MD_SERVERS[server]
+	m = memcache.Memcache(server_settings['LOCATION'], server_settings['PORT'])
+	m.outputmode = memcache.MemcacheOutput.VALUE
+	complete_stats = m.stats()
+	return render_to_response('bootstrap/stats.html', {'settings': settings, 'stats' : complete_stats, 'server' : server_settings})
 
 def console(request):
 	return render_to_response('bootstrap/console.html', {'settings': settings, 'module_console' : True})

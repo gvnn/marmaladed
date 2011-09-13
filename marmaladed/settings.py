@@ -30,3 +30,5 @@ TEMPLATE_DIRS = (
 STATIC_DOC_ROOT = PROJECT_PATH + '/static/'
 
 ROOT_URLCONF = 'marmaladed.urls'
+
+INSTALLED_APPS = ('marmaladed') 

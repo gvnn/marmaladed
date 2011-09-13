@@ -1,11 +1,48 @@
 {% extends "bootstrap/base.html" %}
+{% load dict_extras %}
 {% block module_title %}Home{% endblock %}
+{% block custom_scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="{% url marmaladed.views.home %}gui/js/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="{% url marmaladed.views.home %}gui/js/flot/jquery.flot.pie.js"></script>
+{% endblock %}
 {% block content %}
 <div id="masthead"></div>
 {% for key, value in settings.MD_SERVERS.items %}
 	<section id="server{{ forloop.counter }}">
 		<div class="page-header">
 			<h2>{{ key }} <small>({{ value.LOCATION }}:{{ value.PORT }})</small></h2>
+		</div>
+		<div class="row">
+			<div class="span6 columns">
+				<h4>memory usage</h4>
+				<div id="graph{{ forloop.counter }}" class="graph" style="width:300px;height:300px;"></div>
+				<script language="javascript" type="text/javascript">
+				total_bytes = {{ stats|getkey:key|getkey:'limit_maxbytes' }}
+				used_bytes = {{ stats|getkey:key|getkey:'bytes' }}
+				var data{{ forloop.counter }} = [
+					{ label: "Used " + used_bytes + " bytes",  data: used_bytes, color: '#CB4B4B' },
+					{ label: "Free " + (total_bytes - used_bytes) + " bytes",  data: total_bytes - used_bytes , color: '#339933'}
+				];
+				$(document).ready(function() {
+					$.plot($("#graph{{ forloop.counter }}"), data{{ forloop.counter }}, {
+						series: {
+							pie: {
+								show: true
+							}
+						},
+						legend: {
+							show: false
+						}
+					});
+				});
+				</script>
+			</div>
+			<div class="span10 columns">
+				<div class="twipsies well">
+					<p>Memcached Server Version <code>{{ stats|getkey:key|getkey:'version' }}</code></p>
+				</li>
+			</div>
 		</div>
 	</section>
 {% empty %}

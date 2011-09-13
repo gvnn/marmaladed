@@ -31,7 +31,17 @@ class Memcache:
 			self.client.write("stats\n")
 		else:
 			self.client.write('stats %s\n' % stat_args)
-		return self.client.expect(["ERROR", "CLIENT_ERROR", "END", "SERVER_ERROR"])[2]
+		response = self.client.expect(["ERROR", "CLIENT_ERROR", "END", "SERVER_ERROR"])[2]
+		if self.outputmode == MemcacheOutput.CONSOLE:
+			return response
+		else:
+			data = {}
+			lines = response.splitlines()
+			for line in lines:
+				if not line or line.strip() == 'END': break
+				stats = line.split(' ', 2)
+				data[stats[1]] = stats[2]
+			return data
 		
 	def delete(self, del_args = None):
 		if del_args:
@@ -59,6 +69,6 @@ class Memcache:
 				return ""
 		else:
 			return "ERROR"
-
+			
 	def close(self):
 		self.client.close()

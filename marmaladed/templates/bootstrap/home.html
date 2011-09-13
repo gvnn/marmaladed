@@ -1,21 +1,23 @@
 {% extends "bootstrap/base.html" %}
 {% load dict_extras %}
+{% load parse_extras %}
 {% block module_title %}Home{% endblock %}
 {% block custom_scripts %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="{% url marmaladed.views.home %}gui/js/flot/jquery.flot.js"></script>
 <script language="javascript" type="text/javascript" src="{% url marmaladed.views.home %}gui/js/flot/jquery.flot.pie.js"></script>
+<script language="javascript" type="text/javascript" src="{% url marmaladed.views.home %}gui/js/flot/jquery.flot.stack.js"></script>
 {% endblock %}
 {% block content %}
 <div id="masthead"></div>
 {% for key, value in settings.MD_SERVERS.items %}
 	<section id="server{{ forloop.counter }}">
 		<div class="page-header">
-			<h2>{{ key }} <small>({{ value.LOCATION }}:{{ value.PORT }})</small></h2>
+			<h2>{{ value.DESCRIPTION }} <small>({{ value.LOCATION }}:{{ value.PORT }})</small></h2>
 		</div>
 		<div class="row">
 			<div class="span6 columns">
-				<h4>memory usage</h4>
+				<h4>Memory usage</h4>
 				<div id="graph{{ forloop.counter }}" class="graph" style="width:300px;height:300px;"></div>
 				<script language="javascript" type="text/javascript">
 				total_bytes = {{ stats|getkey:key|getkey:'limit_maxbytes' }}
@@ -25,10 +27,23 @@
 					{ label: "Free " + (total_bytes - used_bytes) + " bytes",  data: total_bytes - used_bytes , color: '#339933'}
 				];
 				$(document).ready(function() {
-					$.plot($("#graph{{ forloop.counter }}"), data{{ forloop.counter }}, {
+					$.plot($("#graph{{ forloop.counter }}"), data{{ forloop.counter }}, 
+					{
 						series: {
-							pie: {
-								show: true
+							pie: { 
+								show: true,
+								radius: 1,
+								label: {
+									show: true,
+									radius: 1/2,
+									formatter: function(label, series){
+										return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+									},
+									background: { 
+										opacity: 0.5,
+										color: '#000'
+									}
+								}
 							}
 						},
 						legend: {
@@ -39,9 +54,19 @@
 				</script>
 			</div>
 			<div class="span10 columns">
+				<h4>Some data <small>(<a href="{% url marmaladed.views.stats key %}">complete stats</a>)</small></h4>
 				<div class="twipsies well">
-					<p>Memcached Server Version <code>{{ stats|getkey:key|getkey:'version' }}</code></p>
-				</li>
+					<p>Memcached Server Version: <code>{{ stats|getkey:key|getkey:'version' }}</code></p>
+					<p>Process id: <code>{{ stats|getkey:key|getkey:'pid' }}</code></p>
+					<p>Current connections: <code>{{ stats|getkey:key|getkey:'curr_connections' }}</code></p>
+					<p>Uptime: <code>{{ stats|getkey:key|getkey:'uptime'|duration }}</code></p>
+					<p>Used Cache Size: <code>{{ stats|getkey:key|getkey:'bytes' }}</code></p>
+					<p>Total Cache Size: <code>{{ stats|getkey:key|getkey:'limit_maxbytes' }}</code></p>
+					<p>Current Items: <code>{{ stats|getkey:key|getkey:'curr_items' }}</code></p>
+					<p>Total Items: <code>{{ stats|getkey:key|getkey:'total_items' }}</code></p>
+					<p>Hits: <code>{{ stats|getkey:key|getkey:'get_hits' }}</code></p>
+					<p>Misses: <code>{{ stats|getkey:key|getkey:'get_misses' }}</code></p>
+				</div>
 			</div>
 		</div>
 	</section>

@@ -12,9 +12,12 @@ def home(request):
 		stats[key] = m.stats()
 	#render the template
 	return render_to_response('bootstrap/home.html', {'settings': settings, 'module_home' : True, 'stats' : stats})
-	
+
 def about(request):
 	return render_to_response('bootstrap/about.html', {'settings': settings, 'module_about' : True})
-	
+
+def stats(request):
+	return render_to_response('bootstrap/about.html', {'settings': settings, 'module_about' : True})
+
 def console(request):
 	return render_to_response('bootstrap/console.html', {'settings': settings, 'module_console' : True})

@@ -8,7 +8,8 @@
 		$.post("/console/command", {'host' : '{{ server.LOCATION }}:{{ server.PORT }}', 'command' : 'delete', 'args' : '{{ key_name }}'}, function(data) {
 			response = jQuery.trim(data);
 			if(response == "DELETED") {
-				location.href = '{% url marmaladed.views.key server_label %}';
+				$("#key_name").val('{{ key_name }}');
+				$("#form_search").submit();
 			} else {
 				$("$error_msg").fadeIn();
 			}
@@ -33,7 +34,6 @@
 			<div>
 				<button class="btn primary" type="submit">Edit</button>&nbsp;<button class="btn danger" onclick='$("#delete_alert").fadeIn();'>Delete</button>
 			</div>
-			
 			<div style="display:none;" id="delete_alert">
 				<p>&nbsp;</p>
 				<div class="alert-message block-message warning">
@@ -43,10 +43,9 @@
 					</p>
 				</div>
 			</div>
-			
 			<p>&nbsp;</p>
 			<div>
-				<form action="{% url marmaladed.views.key server_label %}" method="post">{% csrf_token %}
+				<form id="form_search" action="{% url marmaladed.views.key server_label %}" method="post">{% csrf_token %}
 					<div class="page-header"><h4>Search for a key</h4></div>
 					<div class="clearfix">
 						<label for="key_name">Name:</label>

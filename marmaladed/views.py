@@ -2,6 +2,7 @@
 from django.core.context_processors import csrf
 from django.conf import settings
 from django.shortcuts import render_to_response
+import unicodedata
 import memcache
 
 def home(request):
@@ -27,7 +28,15 @@ def stats(request, server):
 def console(request):
 	return render_to_response('bootstrap/console.html', {'settings': settings, 'module_console' : True})
 	
-def keys(request, server):
-	c = {}
-	c.update(csrf(request))
-	return render_to_response('bootstrap/about.html', c)
+def key(request, server):
+	#get server details
+	server_settings = settings.MD_SERVERS[server]
+	#try get key
+	key_dict = {}
+	key_name = ""
+	if request.method == 'POST':
+		key_name = unicodedata.normalize('NFKD', request.POST["key_name"]).encode('ascii','ignore')
+		m = memcache.Memcache(server_settings['LOCATION'], server_settings['PORT'])
+		m.outputmode = memcache.MemcacheOutput.VALUE
+		key_dict = m.get(key_name)
+	return render_to_response('bootstrap/key.html', {'settings': settings, 'server' : server_settings, 'key' : key_dict, 'key_name' : key_name, 'server_label' : server})

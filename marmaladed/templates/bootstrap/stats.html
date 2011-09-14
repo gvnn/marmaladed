@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 {% load dict_extras %}
-{% block module_title %}Stats{% endblock %}
+{% block module_title %} {{ server.DESCRIPTION }} - Stats{% endblock %}
 {% block custom_scripts %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="{% url marmaladed.views.home %}gui/js/flot/jquery.flot.js"></script>
@@ -11,254 +11,254 @@
 <section id="stats">
 	<div class="page-header">
 		<h1> {{ server.DESCRIPTION }} <small><a href="{% url marmaladed.views.home %}">back to home</a></small></h1>
-		<div class="row">
-			<div class="span4 columns">
-				<h4>Memory usage</h4>
-				<div id="graph" class="graph" style="width:200px;height:200px;"></div>
-				<script language="javascript" type="text/javascript">
-				total_bytes = {{ stats|getkey:'limit_maxbytes' }}
-				used_bytes = {{ stats|getkey:'bytes' }}
-				var data = [
-					{ label: "Used",  data: used_bytes, color: '#CB4B4B' },
-					{ label: "Free",  data: total_bytes - used_bytes , color: '#339933'}
-				];
-				$(document).ready(function() {
-					$.plot($("#graph"), data, 
-					{
-						series: {
-							pie: { 
+	</div>
+	<div class="row">
+		<div class="span4 columns">
+			<h4>Memory usage</h4>
+			<div id="graph" class="graph" style="width:200px;height:200px;"></div>
+			<script language="javascript" type="text/javascript">
+			total_bytes = {{ stats|getkey:'limit_maxbytes' }}
+			used_bytes = {{ stats|getkey:'bytes' }}
+			var data = [
+				{ label: "Used",  data: used_bytes, color: '#CB4B4B' },
+				{ label: "Free",  data: total_bytes - used_bytes , color: '#339933'}
+			];
+			$(document).ready(function() {
+				$.plot($("#graph"), data, 
+				{
+					series: {
+						pie: { 
+							show: true,
+							radius: 1,
+							label: {
 								show: true,
-								radius: 1,
-								label: {
-									show: true,
-									radius: 1/2,
-									formatter: function(label, series){
-										return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-									},
-									background: { 
-										opacity: 0.5,
-										color: '#000'
-									}
+								radius: 1/2,
+								formatter: function(label, series){
+									return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+								},
+								background: { 
+									opacity: 0.5,
+									color: '#000'
 								}
 							}
-						},
-						legend: {
-							show: false
 						}
-					});
+					},
+					legend: {
+						show: false
+					}
 				});
-				</script>				
-				<h4>Hits/Misses</h4>
-				<div id="hitsmisses" class="graph" style="width:200px;height:200px;"></div>
-				<script language="javascript" type="text/javascript">
-				get_misses = {{ stats|getkey:'get_misses' }}
-				get_hits = {{ stats|getkey:'get_hits' }}
-				datahitsmisses = [
-					{ label: "Misses",  data: get_misses, color: '#CB4B4B' },
-					{ label: "Hits",  data: get_hits , color: '#339933'}
-				];
-				$(document).ready(function() {
-					$.plot($("#hitsmisses"), datahitsmisses, 
-					{
-						series: {
-							pie: { 
+			});
+			</script>				
+			<h4>Hits/Misses</h4>
+			<div id="hitsmisses" class="graph" style="width:200px;height:200px;"></div>
+			<script language="javascript" type="text/javascript">
+			get_misses = {{ stats|getkey:'get_misses' }}
+			get_hits = {{ stats|getkey:'get_hits' }}
+			datahitsmisses = [
+				{ label: "Misses",  data: get_misses, color: '#CB4B4B' },
+				{ label: "Hits",  data: get_hits , color: '#339933'}
+			];
+			$(document).ready(function() {
+				$.plot($("#hitsmisses"), datahitsmisses, 
+				{
+					series: {
+						pie: { 
+							show: true,
+							radius: 1,
+							label: {
 								show: true,
-								radius: 1,
-								label: {
-									show: true,
-									radius: 1/2,
-									formatter: function(label, series){
-										return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-									},
-									background: { 
-										opacity: 0.5,
-										color: '#000'
-									}
+								radius: 1/2,
+								formatter: function(label, series){
+									return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+								},
+								background: { 
+									opacity: 0.5,
+									color: '#000'
 								}
 							}
-						},
-						legend: {
-							show: false
 						}
-					});
+					},
+					legend: {
+						show: false
+					}
 				});
-				</script>
-			</div>
-			<div class="span12 columns">
-				<h4>Stats</h4>
-				<table class="zebra-striped">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th style="width:200px;">Value</th>
-							<th style="width:300px;">Meaning</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>pid</td>
-							<td>{{ stats|getkey:'pid' }}</td>
-							<td>Process id of this server process</td>
-						</tr>
-						<tr>
-							<td>uptime</td>
-							<td>{{ stats|getkey:'uptime' }}</td>
-							<td>Number of secs since the server started</td>
-						</tr>
-						<tr>
-							<td>time</td>
-							<td>{{ stats|getkey:'time' }}</td>
-							<td>current UNIX time according to the server</td>
-						</tr>
-						<tr>
-							<td>version</td>
-							<td>{{ stats|getkey:'version' }}</td>
-							<td>Version string of this server</td>
-						</tr>
-						<tr>
-							<td>pointer_size</td>
-							<td>{{ stats|getkey:'pointer_size' }}</td>
-							<td>Default size of pointers on the host OS (generally 32 or 64)</td>
-						</tr>
-						<tr>
-							<td>curr_items</td>
-							<td>{{ stats|getkey:'curr_items' }}</td>
-							<td>Current number of items stored </td>
-						</tr>
-						<tr>
-							<td>total_items</td>
-							<td>{{ stats|getkey:'total_items' }}</td>
-							<td>Total number of items stored since the server started</td>
-						</tr>
-						<tr>
-							<td>bytes</td>
-							<td>{{ stats|getkey:'bytes' }}</td>
-							<td>Current number of bytes used to store items</td>
-						</tr>
-						<tr>
-							<td>curr_connections</td>
-							<td>{{ stats|getkey:'curr_connections' }}</td>
-							<td>Number of open connections</td>
-						</tr>
-						<tr>
-							<td>total_connections</td>
-							<td>{{ stats|getkey:'total_connections' }}</td>
-							<td>Total number of connections opened since the server started running </td>
-						</tr>
-						<tr>
-							<td>connection_structures</td>
-							<td>{{ stats|getkey:'connection_structures' }}</td>
-							<td>Number of connection structures allocated by the server</td>
-						</tr>
-						<tr>
-							<td>cmd_get</td>
-							<td>{{ stats|getkey:'cmd_get' }}</td>
-							<td>Cumulative number of retrieval reqs</td>
-						</tr>
-						<tr>
-							<td>cmd_set</td>
-							<td>{{ stats|getkey:'cmd_set' }}</td>
-							<td>Cumulative number of storage reqs</td>
-						</tr>
-						<tr>
-							<td>get_hits</td>
-							<td>{{ stats|getkey:'get_hits' }}</td>
-							<td>Number of keys that have been requested and found present</td>
-						</tr>
-						<tr>
-							<td>get_misses</td>
-							<td>{{ stats|getkey:'get_misses' }}</td>
-							<td>Number of items that have been requested and not found</td>
-						</tr>
-						<tr>
-							<td>delete_misses</td>
-							<td>{{ stats|getkey:'delete_misses' }}</td>
-							<td>Number of deletions reqs for missing keys</td>
-						</tr>
-						<tr>
-							<td>delete_hits</td>
-							<td>{{ stats|getkey:'delete_hits' }}</td>
-							<td>Number of deletion reqs resulting in an item being removed.</td>
-						</tr>
-						<tr>
-							<td>incr_misses</td>
-							<td>{{ stats|getkey:'incr_misses' }}</td>
-							<td>Number of incr reqs against missing keys.</td>
-						</tr>
-						<tr>
-							<td>incr_hits</td>
-							<td>{{ stats|getkey:'incr_hits' }}</td>
-							<td>Number of successful incr reqs.</td>
-						</tr>
-						<tr>
-							<td>decr_misses</td>
-							<td>{{ stats|getkey:'decr_misses' }}</td>
-							<td>Number of decr reqs against missing keys.</td>
-						</tr>
-						<tr>
-							<td>decr_hits</td>
-							<td>{{ stats|getkey:'decr_hits' }}</td>
-							<td>Number of successful decr reqs.</td>
-						</tr>
-						<tr>
-							<td>cas_misses</td>
-							<td>{{ stats|getkey:'cas_misses' }}</td>
-							<td>Number of CAS reqs against missing keys.</td>
-						</tr>
-						<tr>
-							<td>cas_hits</td>
-							<td>{{ stats|getkey:'cas_hits' }}</td>
-							<td>Number of successful CAS reqs.</td>
-						</tr>
-						<tr>
-							<td>cas_badval</td>
-							<td>{{ stats|getkey:'cas_badval' }}</td>
-							<td>Number of CAS reqs for which a key was found, but the CAS value did not match.</td>
-						</tr>
-						<tr>
-							<td>auth_cmds</td>
-							<td>{{ stats|getkey:'auth_cmds' }}</td>
-							<td>Number of authentication commands handled, success or failure.</td>
-						</tr>
-						<tr>
-							<td>auth_errors</td>
-							<td>{{ stats|getkey:'auth_errors' }}</td>
-							<td>Number of failed authentications.</td>
-						</tr>
-						<tr>
-							<td>evictions</td>
-							<td>{{ stats|getkey:'evictions' }}</td>
-							<td>Number of valid items removed from cache to free memory for new items</td>
-						</tr>
-						<tr>
-							<td>bytes_read</td>
-							<td>{{ stats|getkey:'bytes_read' }}</td>
-							<td>Total number of bytes read by this server from network</td>
-						</tr>
-						<tr>
-							<td>bytes_written</td>
-							<td>{{ stats|getkey:'bytes_written' }}</td>
-							<td>Total number of bytes sent by this server to network</td>
-						</tr>
-						<tr>
-							<td>limit_maxbytes</td>
-							<td>{{ stats|getkey:'limit_maxbytes' }}</td>
-							<td>Number of bytes this server is allowed to use for storage.</td>
-						</tr>
-						<tr>
-							<td>threads</td>
-							<td>{{ stats|getkey:'threads' }}</td>
-							<td>Number of worker threads requested.</td>
-						</tr>
-						<tr>
-							<td>conn_yields</td>
-							<td>{{ stats|getkey:'conn_yields' }}</td>
-							<td>Number of times any connection yielded to another due to hitting the -R limit.</td>
-						</tr>
-					</tbody>
-				</table>
-				
-			</div>
+			});
+			</script>
+		</div>
+		<div class="span12 columns">
+			<h4>Stats</h4>
+			<table class="zebra-striped">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th style="width:200px;">Value</th>
+						<th style="width:300px;">Meaning</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>pid</td>
+						<td>{{ stats|getkey:'pid' }}</td>
+						<td>Process id of this server process</td>
+					</tr>
+					<tr>
+						<td>uptime</td>
+						<td>{{ stats|getkey:'uptime' }}</td>
+						<td>Number of secs since the server started</td>
+					</tr>
+					<tr>
+						<td>time</td>
+						<td>{{ stats|getkey:'time' }}</td>
+						<td>current UNIX time according to the server</td>
+					</tr>
+					<tr>
+						<td>version</td>
+						<td>{{ stats|getkey:'version' }}</td>
+						<td>Version string of this server</td>
+					</tr>
+					<tr>
+						<td>pointer_size</td>
+						<td>{{ stats|getkey:'pointer_size' }}</td>
+						<td>Default size of pointers on the host OS (generally 32 or 64)</td>
+					</tr>
+					<tr>
+						<td>curr_items</td>
+						<td>{{ stats|getkey:'curr_items' }}</td>
+						<td>Current number of items stored </td>
+					</tr>
+					<tr>
+						<td>total_items</td>
+						<td>{{ stats|getkey:'total_items' }}</td>
+						<td>Total number of items stored since the server started</td>
+					</tr>
+					<tr>
+						<td>bytes</td>
+						<td>{{ stats|getkey:'bytes' }}</td>
+						<td>Current number of bytes used to store items</td>
+					</tr>
+					<tr>
+						<td>curr_connections</td>
+						<td>{{ stats|getkey:'curr_connections' }}</td>
+						<td>Number of open connections</td>
+					</tr>
+					<tr>
+						<td>total_connections</td>
+						<td>{{ stats|getkey:'total_connections' }}</td>
+						<td>Total number of connections opened since the server started running </td>
+					</tr>
+					<tr>
+						<td>connection_structures</td>
+						<td>{{ stats|getkey:'connection_structures' }}</td>
+						<td>Number of connection structures allocated by the server</td>
+					</tr>
+					<tr>
+						<td>cmd_get</td>
+						<td>{{ stats|getkey:'cmd_get' }}</td>
+						<td>Cumulative number of retrieval reqs</td>
+					</tr>
+					<tr>
+						<td>cmd_set</td>
+						<td>{{ stats|getkey:'cmd_set' }}</td>
+						<td>Cumulative number of storage reqs</td>
+					</tr>
+					<tr>
+						<td>get_hits</td>
+						<td>{{ stats|getkey:'get_hits' }}</td>
+						<td>Number of keys that have been requested and found present</td>
+					</tr>
+					<tr>
+						<td>get_misses</td>
+						<td>{{ stats|getkey:'get_misses' }}</td>
+						<td>Number of items that have been requested and not found</td>
+					</tr>
+					<tr>
+						<td>delete_misses</td>
+						<td>{{ stats|getkey:'delete_misses' }}</td>
+						<td>Number of deletions reqs for missing keys</td>
+					</tr>
+					<tr>
+						<td>delete_hits</td>
+						<td>{{ stats|getkey:'delete_hits' }}</td>
+						<td>Number of deletion reqs resulting in an item being removed.</td>
+					</tr>
+					<tr>
+						<td>incr_misses</td>
+						<td>{{ stats|getkey:'incr_misses' }}</td>
+						<td>Number of incr reqs against missing keys.</td>
+					</tr>
+					<tr>
+						<td>incr_hits</td>
+						<td>{{ stats|getkey:'incr_hits' }}</td>
+						<td>Number of successful incr reqs.</td>
+					</tr>
+					<tr>
+						<td>decr_misses</td>
+						<td>{{ stats|getkey:'decr_misses' }}</td>
+						<td>Number of decr reqs against missing keys.</td>
+					</tr>
+					<tr>
+						<td>decr_hits</td>
+						<td>{{ stats|getkey:'decr_hits' }}</td>
+						<td>Number of successful decr reqs.</td>
+					</tr>
+					<tr>
+						<td>cas_misses</td>
+						<td>{{ stats|getkey:'cas_misses' }}</td>
+						<td>Number of CAS reqs against missing keys.</td>
+					</tr>
+					<tr>
+						<td>cas_hits</td>
+						<td>{{ stats|getkey:'cas_hits' }}</td>
+						<td>Number of successful CAS reqs.</td>
+					</tr>
+					<tr>
+						<td>cas_badval</td>
+						<td>{{ stats|getkey:'cas_badval' }}</td>
+						<td>Number of CAS reqs for which a key was found, but the CAS value did not match.</td>
+					</tr>
+					<tr>
+						<td>auth_cmds</td>
+						<td>{{ stats|getkey:'auth_cmds' }}</td>
+						<td>Number of authentication commands handled, success or failure.</td>
+					</tr>
+					<tr>
+						<td>auth_errors</td>
+						<td>{{ stats|getkey:'auth_errors' }}</td>
+						<td>Number of failed authentications.</td>
+					</tr>
+					<tr>
+						<td>evictions</td>
+						<td>{{ stats|getkey:'evictions' }}</td>
+						<td>Number of valid items removed from cache to free memory for new items</td>
+					</tr>
+					<tr>
+						<td>bytes_read</td>
+						<td>{{ stats|getkey:'bytes_read' }}</td>
+						<td>Total number of bytes read by this server from network</td>
+					</tr>
+					<tr>
+						<td>bytes_written</td>
+						<td>{{ stats|getkey:'bytes_written' }}</td>
+						<td>Total number of bytes sent by this server to network</td>
+					</tr>
+					<tr>
+						<td>limit_maxbytes</td>
+						<td>{{ stats|getkey:'limit_maxbytes' }}</td>
+						<td>Number of bytes this server is allowed to use for storage.</td>
+					</tr>
+					<tr>
+						<td>threads</td>
+						<td>{{ stats|getkey:'threads' }}</td>
+						<td>Number of worker threads requested.</td>
+					</tr>
+					<tr>
+						<td>conn_yields</td>
+						<td>{{ stats|getkey:'conn_yields' }}</td>
+						<td>Number of times any connection yielded to another due to hitting the -R limit.</td>
+					</tr>
+				</tbody>
+			</table>
+			
 		</div>
 	</div>
 </section>

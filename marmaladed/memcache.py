@@ -56,9 +56,22 @@ class Memcache:
 	def get(self, get_args = None):
 		if get_args:
 			self.client.write('get %s\n' % get_args)
-			return self.client.expect(["ERROR", "CLIENT_ERROR", "END", "SERVER_ERROR"])[2]
+			response =  self.client.expect(["ERROR", "CLIENT_ERROR", "END", "SERVER_ERROR"])[2]
+			if self.outputmode == MemcacheOutput.CONSOLE:
+				return response
+			else:
+				data = {}
+				lines = response.splitlines()
+				if len(lines) > 1:
+					info = lines[0].split(' ')
+					data['info'] = { 'name' : info[1], 'flag' : info[2], 'bytes' : info[3]} 
+					data['value'] = lines[1]
+				return data
 		else:
-			return "ERROR"
+			if self.outputmode == MemcacheOutput.CONSOLE:
+				return "ERROR"
+			else:
+				return {}
 			
 	def storage(self, command, args = None, value = None):
 		if args and value:

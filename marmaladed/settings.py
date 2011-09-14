@@ -29,12 +29,11 @@ TEMPLATE_DIRS = (
     PROJECT_PATH + '/templates/'
 )
 
-MIDDLEWARE_CLASSES = ('django.middleware.common.CommonMiddleware',
- 'django.contrib.sessions.middleware.SessionMiddleware',
- 'django.middleware.csrf.CsrfViewMiddleware',
- 'django.middleware.csrf.CsrfResponseMiddleware',
- 'django.contrib.auth.middleware.AuthenticationMiddleware',
- 'django.contrib.messages.middleware.MessageMiddleware',)
+MIDDLEWARE_CLASSES = (
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.middleware.csrf.CsrfResponseMiddleware',
+)
 
 STATIC_DOC_ROOT = PROJECT_PATH + '/static/'
 

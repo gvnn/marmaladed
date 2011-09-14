@@ -1,0 +1,84 @@
+{% extends "bootstrap/base.html" %}
+{% load dict_extras %}
+{% block module_title %} {{ server.DESCRIPTION }} - Keys{% endblock %}
+{% block custom_scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+<script>
+	function delete_key(){
+		$.post("/console/command", {'host' : '{{ server.LOCATION }}:{{ server.PORT }}', 'command' : 'delete', 'args' : '{{ key_name }}'}, function(data) {
+			response = jQuery.trim(data);
+			if(response == "DELETED") {
+				location.href = '{% url marmaladed.views.key server_label %}';
+			} else {
+				$("$error_msg").fadeIn();
+			}
+		});
+	}
+</script>
+{% endblock %}
+{% block content %}
+<div id="masthead"></div>
+<section id="key">
+	<div class="page-header">
+		<h1>Search result for "{{ key_name }}"  <small> on {{ server.DESCRIPTION }}</small></h1>
+	</div>
+{% if key %}
+	<div  style="display:none;" id="error_msg" class="alert-message error">
+		<p><strong>Error!</strong> {{ settings.PROJECT_NAME }} couldn't delete the key, try again!</p>
+	</div>
+	<div class="row">
+		<div class="span12 columns">
+			<h3>Value</h3>
+			<pre id="value" class="prettyprint linenums">{{ key|getkey:'value' }}</pre>
+			<div>
+				<button class="btn primary" type="submit">Edit</button>&nbsp;<button class="btn danger" onclick='$("#delete_alert").fadeIn();'>Delete</button>
+			</div>
+			
+			<div style="display:none;" id="delete_alert">
+				<p>&nbsp;</p>
+				<div class="alert-message block-message warning">
+					<p>
+						<strong>Are you sure?</strong>
+						<a href="#" onclick="delete_key();" class="btn small">Yes, delete</a> <a href="#" onclick='$("#delete_alert").fadeOut();' class="btn small">Cancel</a>
+					</p>
+				</div>
+			</div>
+			
+			<p>&nbsp;</p>
+			<div>
+				<form action="{% url marmaladed.views.key server_label %}" method="post">{% csrf_token %}
+					<div class="page-header"><h4>Search for a key</h4></div>
+					<div class="clearfix">
+						<label for="key_name">Name:</label>
+						<div class="input">
+							<input type="text" size="30" name="key_name" id="key_name" class="xlarge">&nbsp;<input type="submit" value="Search" class="btn primary">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="span4 columns">
+			<h3>Info</h3>
+			<p>Bytes: <code>{{ key|getkey:'info'|getkey:'bytes' }}</code>, Flag: <code>{{ key|getkey:'info'|getkey:'flag' }}</code></p>
+		</div>
+	</div>
+{% else %}
+	<div class="alert-message block-message error">
+		<p>
+			<strong>Oh snap! No key found!</strong> 
+			<br />
+			{{ settings.PROJECT_NAME }} couldn't find the key, try again!
+		</p>
+		<p>&nbsp;</p>
+		<form action="{% url marmaladed.views.key server_label %}" method="post">{% csrf_token %}
+			<div class="alert-actions">
+				<label for="key_name">Search for a key:</label>
+				<div class="input">
+					<input type="text" size="30" name="key_name" id="key_name" class="xlarge">&nbsp;<input type="submit" value="Search" class="btn small">
+				</div>
+			</div>
+		</form>
+	</div>
+{% endif %}
+</section>
+{% endblock %}

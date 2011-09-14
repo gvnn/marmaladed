@@ -66,11 +66,11 @@
 					<p>Hits: <code>{{ stats|getkey:key|getkey:'get_hits' }}</code></p>
 					<p>Misses: <code>{{ stats|getkey:key|getkey:'get_misses' }}</code></p>
 				</div>
-				<form action="{% url marmaladed.views.keys key %}" method="post">{% csrf_token %}
+				<form action="{% url marmaladed.views.key key %}" method="post">{% csrf_token %}
 					<div class="clearfix">
-						<label for="xlInput">Search for a key:</label>
+						<label for="key_name">Search for a key:</label>
 						<div class="input">
-							<input type="text" size="30" name="xlInput" id="xlInput" class="xlarge">&nbsp;<input type="submit" value="Search" class="btn primary">
+							<input type="text" size="30" name="key_name" id="key_name" class="xlarge">&nbsp;<input type="submit" value="Search" class="btn primary">
 						</div>
 					</div>
 				</form>

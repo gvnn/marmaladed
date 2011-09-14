@@ -1,0 +1,25 @@
+Marmaladed, a simple django memcached console.
+
+Version: 0.3
+
+Author: Giovanni Ferron - http://www.gvnn.it
+
+This is my first django project, I built this tool just because I wanted to have a bit of fun and evaluate the framework... Any suggestions are welcome.
+
+Requirements: django 1.2 or newer
+
+Config:
+
+- Add marmaladed to your INSTALLED_APPS setting:
+
+	INSTALLED_APPS = (
+		# ...
+		'marmaladed',
+	)
+	   
+- Add the urls to your url configuration::
+
+	urlpatterns = patterns('',
+		# ...
+		(r'^marmaladed/', include('marmaladed.urls')),
+	)

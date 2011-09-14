@@ -15,13 +15,24 @@
 			}
 		});
 	}
+	
+	function edit_key(){
+		$("#main_buttons").toggle('slow');
+		$("#edit_area").toggle('slow');
+	}
+		
+	function edit_cancel_key(){
+		$("#main_buttons").toggle('slow');
+		$("#edit_area").toggle('slow');
+	}
 </script>
 {% endblock %}
 {% block content %}
 <div id="masthead"></div>
 <section id="key">
 	<div class="page-header">
-		<h1>Search result for "{{ key_name }}"  <small> on {{ server.DESCRIPTION }}</small></h1>
+		<h1>Search result <small> on {{ server.DESCRIPTION }}</small></h1>
+		<h3>Key <code>"{{ key_name }}" </code></h3>
 	</div>
 {% if key %}
 	<div  style="display:none;" id="error_msg" class="alert-message error">
@@ -31,15 +42,21 @@
 		<div class="span12 columns">
 			<h3>Value</h3>
 			<pre id="value" class="prettyprint linenums">{{ key|getkey:'value' }}</pre>
-			<div>
-				<button class="btn primary" type="submit">Edit</button>&nbsp;<button class="btn danger" onclick='$("#delete_alert").fadeIn();'>Delete</button>
+			<div id="edit_area" style="display:none;" class="form-stacked">
+				<textarea name="textarea" id="textarea" class="xxlarge" style="width: 95%; height: 150px;"></textarea>
+				<div class="actions">
+					<input type="submit" value="Save Changes" class="btn primary">
+					<button class="btn" type="reset" onclick="edit_cancel_key()">Cancel</button>
+				</div>
+			</div>			
+			<div id="main_buttons">
+				<button class="btn primary" type="submit" onclick="edit_key();">Edit</button>&nbsp;<button class="btn" onclick='$("#delete_alert").toggle("slow");$("#main_buttons").toggle("slow");'>Delete</button>
 			</div>
 			<div style="display:none;" id="delete_alert">
-				<p>&nbsp;</p>
 				<div class="alert-message block-message warning">
 					<p>
 						<strong>Are you sure?</strong>
-						<a href="#" onclick="delete_key();" class="btn small">Yes, delete</a> <a href="#" onclick='$("#delete_alert").fadeOut();' class="btn small">Cancel</a>
+						<a href="#" onclick="delete_key();" class="btn small danger">Yes, delete</a> <a href="#" onclick='$("#delete_alert").toggle("slow");$("#main_buttons").toggle("slow");' class="btn small">Cancel</a>
 					</p>
 				</div>
 			</div>

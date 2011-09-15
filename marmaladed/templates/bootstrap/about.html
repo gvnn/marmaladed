@@ -4,18 +4,17 @@
 <div id="masthead"></div>
 <section id="about">
 	<div class="page-header">
-		<h1>About {{ settings.PROJECT_NAME }} <small>a django console for memcached</small></h1>
+		<h1>About {{ settings.PROJECT_NAME }} <small>a (very) simple django console for memcached</small></h1>
 	</div>
 	<div class="row">
 		<div class="span4 columns">
 			<img src="{% url marmaladed.views.home %}gui/img/logo.png" width="200" height="271" alt="Logo" />
 		</div>
 		<div class="span12 columns">
+			<p>Version: {{ settings.PROJECT_VERSION }}</p>
 			<p>
-				Marmaladed is a simple web tool to manage <a href="http://memcached.org/" target="_blank">memcached</a>. 
-				<br />
 				This is my first project using Python and Django and the purpose of 
-				this project is purely educational... moreover there are not so many nice web interfaces for memcached.
+				this project is purely educational, moreover there are not so many nice web interfaces for memcached. Any suggestions are welcome.
 			</p>
 			<p>
 				Sourcecode, updates, issues, etc.. <a href="https://github.com/gvnn/marmaladed" target="_blank">https://github.com/gvnn/marmaladed</a>

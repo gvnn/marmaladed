@@ -4,6 +4,16 @@
 {% block custom_scripts %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
 <script>
+	String.prototype.format = function() {
+	  var args = arguments;
+	  return this.replace(/{(\d+)}/g, function(match, number) { 
+	    return typeof args[number] != 'undefined'
+	      ? args[number]
+	      : '{' + number + '}'
+	    ;
+	  });
+	};
+	
 	function delete_key(){
 		$.post("/console/command", {'host' : '{{ server.LOCATION }}:{{ server.PORT }}', 'command' : 'delete', 'args' : '{{ key_name }}'}, function(data) {
 			response = jQuery.trim(data);
@@ -11,7 +21,7 @@
 				$("#key_name").val('{{ key_name }}');
 				$("#form_search").submit();
 			} else {
-				$("$error_msg").fadeIn();
+				$("#error_msg").fadeIn();
 			}
 		});
 	}
@@ -25,6 +35,23 @@
 		$("#main_buttons").toggle('slow');
 		$("#edit_area").toggle('slow');
 	}
+	
+	{% if key %}
+	function submit_edit() {
+		val = $("#key_value").val();
+		exp_time = $("#exp_time").val();
+		flag = {{ key|getkey:'info'|getkey:'flag' }};
+		$.post("/console/command", {'host' : '{{ server.LOCATION }}:{{ server.PORT }}', 'command' : 'set', 'args' : "{0} {1} {2} {3}".format('{{ key_name }}', flag, exp_time, val.length), 'value' : val}, function(data) {
+			response = jQuery.trim(data);
+			if(response == "STORED") {
+				$("#key_name").val('{{ key_name }}');
+				$("#form_search").submit();
+			} else {
+				$("#error_msg").fadeIn();
+			}
+		});
+	}
+	{% endif %}
 </script>
 {% endblock %}
 {% block content %}
@@ -36,16 +63,18 @@
 	</div>
 {% if key %}
 	<div  style="display:none;" id="error_msg" class="alert-message error">
-		<p><strong>Error!</strong> {{ settings.PROJECT_NAME }} couldn't delete the key, try again!</p>
+		<p><strong>Error!</strong> {{ settings.PROJECT_NAME }} couldn't edit/delete the key, try again!</p>
 	</div>
 	<div class="row">
 		<div class="span12 columns">
 			<h3>Value</h3>
 			<pre id="value" class="prettyprint linenums">{{ key|getkey:'value' }}</pre>
 			<div id="edit_area" style="display:none;" class="form-stacked">
-				<textarea name="textarea" id="textarea" class="xxlarge" style="width: 95%; height: 150px;"></textarea>
+				<textarea name="key_value" id="key_value" class="xxlarge" style="width: 95%; height: 150px;">{{ key|getkey:'value' }}</textarea>
+				<label for="exp_time">Expiration time:</label>
+				<input value="0" type="text" size="30" name="exp_time" id="exp_time" class="xlarge">
 				<div class="actions">
-					<input type="submit" value="Save Changes" class="btn primary">
+					<input onclick="submit_edit();" type="button" value="Save Changes" class="btn primary">
 					<button class="btn" type="reset" onclick="edit_cancel_key()">Cancel</button>
 				</div>
 			</div>			

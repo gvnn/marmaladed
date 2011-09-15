@@ -1,10 +1,10 @@
-Marmaladed, a simple django memcached console.
+Marmaladed, a (very) simple django memcached console.
 
 Version: 0.3
 
 Author: Giovanni Ferron - http://www.gvnn.it
 
-This is my first django project, I built this tool just because I wanted to have a bit of fun and evaluate the framework... Any suggestions are welcome.
+This is my first project using Python and Django and the purpose of this project is purely educational, moreover there are not so many nice web interfaces for memcached. Any suggestions are welcome.
 
 Requirements: django 1.2 or newer
 

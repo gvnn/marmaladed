@@ -6,17 +6,14 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 PROJECT_NAME = 'Marmaladed'
 
+PROJECT_VERSION = '0.3'
+
 MD_SERVERS = {
-    'virtual': {
-		'DESCRIPTION' : 'Virtual machine',
+    'local': {
+		'DESCRIPTION' : 'Local Machine',
         'LOCATION' : '127.0.0.1',
 		'PORT' : '11211'
-    },
-    'gvnn': {
-        'DESCRIPTION' : 'Gvnn\'s server',
-        'LOCATION' : '10.0.22.10',
-		'PORT' : '11211'
-    }
+	}
 }
 
 #django variables

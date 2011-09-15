@@ -4,7 +4,7 @@ Version: 0.3
 
 Author: Giovanni Ferron - http://www.gvnn.it
 
-This is my first project using Python and Django and the purpose of this project is purely educational, moreover there are not so many nice web interfaces for memcached. Any suggestions are welcome.
+This is my first project using Python and Django and the purpose of this project is purely educational, moreover there are not so many nice web interfaces for memcached... Any suggestions are welcome.
 
 Requirements: django 1.2 or newer
 
